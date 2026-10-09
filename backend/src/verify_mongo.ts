@@ -25,7 +25,7 @@ async function verifyMongo() {
   console.log('\n2. Testing Database Connection & Operations...');
   try {
     // 3 second connection timeout
-    await mongoose.connect(uri, { serverSelectionTimeoutMS: 3000 });
+    await mongoose.connect(uri, { serverSelectionTimeoutMS: 3000 } as mongoose.ConnectOptions);
     
     if (mongoose.connection.readyState !== 1) {
       throw new Error(`MongoDB connection readyState is ${mongoose.connection.readyState} (expected 1).`);

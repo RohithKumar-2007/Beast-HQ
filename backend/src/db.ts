@@ -14,7 +14,7 @@ export async function connectDatabase(): Promise<boolean> {
     // 5 second connection timeout for fast startup failure fallback
     await mongoose.connect(uri, {
       serverSelectionTimeoutMS: 5000,
-    });
+    } as mongoose.ConnectOptions);
     isConnected = true;
     console.log('✅ Connected to MongoDB successfully.');
     return true;
@@ -22,7 +22,6 @@ export async function connectDatabase(): Promise<boolean> {
     const error = err as Error;
     isConnected = false;
     console.warn('⚠️ MongoDB connection attempt failed:', error.message);
-    console.warn('⚠️ Server running in fallback API mode. Database persistence requires active MongoDB instance or Atlas connection string.');
     return false;
   }
 }
