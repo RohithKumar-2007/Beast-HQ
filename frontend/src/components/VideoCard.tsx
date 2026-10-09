@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { VideoItem } from '../data/videos';
 import { Video, ExternalLink } from './icons';
 
@@ -7,6 +7,18 @@ interface VideoCardProps {
 }
 
 export const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
+  const [imgSrc, setImgSrc] = useState<string>(
+    video.thumbnailUrl || `https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg`
+  );
+  const [imgError, setImgError] = useState<boolean>(false);
+
+  const handleImageError = () => {
+    if (!imgError && video.youtubeId) {
+      setImgError(true);
+      setImgSrc(`https://i.ytimg.com/vi/${video.youtubeId}/mqdefault.jpg`);
+    }
+  };
+
   return (
     <article className="video-card">
       <a
@@ -17,12 +29,13 @@ export const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
         style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', height: '100%' }}
       >
         {/* Video Thumbnail Wrapper */}
-        <div className="video-thumb-wrapper">
+        <div className="video-thumb-wrapper" style={{ backgroundColor: 'var(--color-bg-page)' }}>
           <img
-            src={video.thumbnailUrl}
+            src={imgSrc}
             alt={`Official YouTube thumbnail for video: ${video.title}`}
             className="video-thumb-img"
             loading="lazy"
+            onError={handleImageError}
           />
           <div className="video-thumb-overlay">
             <div className="video-play-btn" aria-hidden="true">

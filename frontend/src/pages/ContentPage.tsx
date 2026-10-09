@@ -21,11 +21,18 @@ export const ContentPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<VideoCategory>('All');
 
-  // Featured video for prominent hero display
   const featuredVideo = useMemo(
     () => FEATURED_VIDEOS.find((v) => v.featured) || FEATURED_VIDEOS[0],
     []
   );
+
+  const [featuredImgSrc, setFeaturedImgSrc] = useState<string>(featuredVideo.thumbnailUrl);
+
+  const handleFeaturedImgError = () => {
+    if (featuredVideo.youtubeId) {
+      setFeaturedImgSrc(`https://i.ytimg.com/vi/${featuredVideo.youtubeId}/mqdefault.jpg`);
+    }
+  };
 
   // Combined search and category filtering
   const filteredVideos = useMemo(() => {
@@ -82,10 +89,11 @@ export const ContentPage: React.FC = () => {
           {/* Thumbnail / Media Container */}
           <div className="video-thumb-wrapper" style={{ minHeight: '260px' }}>
             <img
-              src={featuredVideo.thumbnailUrl}
+              src={featuredImgSrc}
               alt={`Featured video thumbnail: ${featuredVideo.title}`}
               className="video-thumb-img"
               loading="eager"
+              onError={handleFeaturedImgError}
             />
             <div className="video-thumb-overlay">
               <a
